@@ -145,7 +145,8 @@ class Streamline(object):
 class Streamlines(object):
     """A sequence of diffusion MRI streamlines"""
 
-    def __init__(self, iterable=None, affine=np.eye(4)):
+    def __init__(self, iterable=None, affine=np.eye(4),
+                 reference_volume_shape=(1, 1, 1), voxel_sizes=(1, 1, 1)):
         """Sequence of diffusion MRI streamlines
 
            An instance of the Streamlines class represents a group of diffusion
@@ -157,10 +158,15 @@ class Streamlines(object):
                     to a Streamline instance, i.e. it must be convertible to a
                     (N, 3) array of float. See the Streamline class for more
                     details.
-
+                affine (optional): Transformation from current space to rasmm.
+                reference_volume_shape (optional): Size of the volume in which
+                    the streamlines will be displayed. Needed by trackvis.
+                voxel_size (optional): Voxel size of the volume in which the
+                    streamlines will be displayed. Needed by trackvis.
         """
-
         self.affine = affine
+        self.reference_volume_shape = reference_volume_shape
+        self.voxel_sizes = voxel_sizes
 
         self._items = []
         if iterable is not None:

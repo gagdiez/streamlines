@@ -18,6 +18,9 @@ class TestIO(unittest.TestCase):
                            [0., 1.25, 0., -126.],
                            [0., 0., 1.25, -72.],
                            [0., 0., 0., 1.]])
+        
+        voxel_sizes = [0.1, 0.2, 0.3]
+        ref_volume_shape = [100, 100, 100]
 
         output = NamedTemporaryFile(mode='w', delete=True, suffix='.trk').name
 
@@ -32,3 +35,12 @@ class TestIO(unittest.TestCase):
         sl.io.save(streamlines_affine, output)
         recovered = sl.io.load(output)
         np.testing.assert_almost_equal(streamlines, recovered, 5)
+
+        # With metadata
+        streamlines_affine = sl.Streamlines(streamlines, affine,
+                                            ref_volume_shape, voxel_sizes)
+        sl.io.save(streamlines_affine, output)
+        recovered = sl.io.load(output)
+        np.testing.assert_equal(recovered.reference_volume_shape,
+                                ref_volume_shape)
+        np.testing.assert_almost_equal(recovered.voxel_sizes, voxel_sizes)
