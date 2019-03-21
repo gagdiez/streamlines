@@ -15,6 +15,8 @@ def parse_arguments():
     parser = argparse.ArgumentParser(description=DESCRIPTION)
     subparsers = parser.add_subparsers()
 
+    parser.add_argument('function', type=str)
+
     # The filter subparser.
     filter_subparser = subparsers.add_parser(
         'filter',
@@ -23,7 +25,7 @@ def parse_arguments():
                     '50mm using --min-length 50.',
         help='Filters streamlines based on their features.')
     filter_subparser.add_argument(
-        'input', metavar='input_file', type=str, 
+        'input', metavar='input_file', type=str,
         help='STR The file that contains the streamlines to filter. Can be of '
              'any file format supported by nibabel.')
     filter_subparser.add_argument(
