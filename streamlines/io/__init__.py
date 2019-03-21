@@ -9,8 +9,13 @@ def load(filename):
     # Load the input streamlines.
     tractogram_file = nib.streamlines.load(filename)
     affine_to_rasmm = tractogram_file.header['voxel_to_rasmm']
-    reference_volume_shape = tractogram_file.header['dimensions']
-    voxel_sizes = tractogram_file.header['voxel_sizes']
+
+    if filename.endswith('trk'):
+        reference_volume_shape = tractogram_file.header['dimensions']
+        voxel_sizes = tractogram_file.header['voxel_sizes']
+    else:
+        reference_volume_shape = (1, 1, 1)
+        voxel_sizes = (1, 1, 1)
 
     tractogram = tractogram_file.tractogram
     if not np.allclose(affine_to_rasmm, np.eye(4)):
