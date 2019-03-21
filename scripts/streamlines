@@ -13,9 +13,8 @@ Streamline manipulation on the command line
 def parse_arguments():
 
     parser = argparse.ArgumentParser(description=DESCRIPTION)
-    subparsers = parser.add_subparsers()
-
-    parser.add_argument('function', type=str)
+    subparsers = parser.add_subparsers(dest='func')
+    subparsers.required = True
 
     # The filter subparser.
     filter_subparser = subparsers.add_parser(
@@ -102,6 +101,20 @@ def parse_arguments():
              'streamlines.')
     smooth_subparser.set_defaults(func=streamlines.cli.smooth)
 
+    # The transform subparser.
+    transform_subparser = subparsers.add_parser(
+        'transform',
+        description='Transforms streamlines from one file format to another.',
+        help='Transforms streamlines from one file format to another.')
+    transform_subparser.add_argument(
+        'input', metavar='input_file', type=str,
+        help='STR The file that contains the streamlines in the original '
+             'file format.')
+    transform_subparser.add_argument(
+        'output', metavar='output_file', type=str,
+        help='STR The file where to output the streamlines.')
+    transform_subparser.set_defaults(func=streamlines.cli.transform)
+
     # The view subparser.
     view_subparser = subparsers.add_parser(
         'view',
@@ -120,11 +133,10 @@ def parse_arguments():
 
 
 def main():
-
     args = parse_arguments()
     parameters = {key: value for key, value in vars(args).items() if key != 'func'}
     args.func(**parameters)
 
 
 if __name__ == '__main__':
-  main()
+    main()
