@@ -32,7 +32,7 @@ def merge(inputs, output):
 
     # Load all the input streamlines and merge them.
     streamlines_list = [load(i) for i in inputs]
-    streamlines = reduce(operator.iadd, streamlines_list)    
+    streamlines = reduce(operator.iadd, streamlines_list)
 
     # Save the streamlines to the output file.
     save(streamlines, output)
@@ -55,6 +55,10 @@ def smooth(input, output, **kwargs):
     # Save the streamlines to the output file.
     save(streamlines, output)
 
+def transform(input, output):
+    """Transforms streamlines from one fileformat to another"""
+    streamlines = load(input)
+    save(streamlines, output)
 
 def view(filename):
     """View streamlines in interactive window"""
