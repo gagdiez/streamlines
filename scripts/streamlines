@@ -16,6 +16,21 @@ def parse_arguments():
     subparsers = parser.add_subparsers(dest='func')
     subparsers.required = True
 
+    # The compress subparser.
+    compress_subparser = subparsers.add_parser(
+        'compress',
+        description='Compress streamlines by approximating each streamlines '
+                    'by a polygon, and then mergin colinear consecutive '
+                    'segments.',
+        help='Compress streamlines.')
+    compress_subparser.add_argument(
+        'input', metavar='input_file', type=str,
+        help='STR The file that contains the streamlines to compress.')
+    compress_subparser.add_argument(
+        'output', metavar='output_file', type=str,
+        help='STR The file where the compressed streamlines will be saved.')
+    compress_subparser.set_defaults(func=streamlines.cli.compress)
+
     # The filter subparser.
     filter_subparser = subparsers.add_parser(
         'filter',

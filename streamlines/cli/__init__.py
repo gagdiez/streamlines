@@ -7,6 +7,12 @@ import vtk
 from streamlines.io import load, save
 
 
+def compress(input, output):
+    """Compress streamlines"""
+    streamlines = load(input)
+    streamlines.compress()
+    save(streamlines, output)
+
 def filter(input, output, **kwargs):
 
     # Load the input streamlines using the requested parameters.

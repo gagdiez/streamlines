@@ -3,9 +3,19 @@ import builtins
 import numpy as np
 import scipy
 
+from dipy.tracking.distances import approx_polygon_track
+from dipy.tracking.streamlinespeed import compress_streamlines
 
 MIN_NB_POINTS = 10
 KEY_INDEX = np.concatenate((range(5), range(-1, -6, -1)))
+
+
+def compress(streamline):
+
+    downsampled = approx_polygon_track(streamline, 0.25)
+    compressed = compress_streamlines(downsampled)
+
+    return compressed
 
 
 def hash(array):

@@ -4,8 +4,8 @@ import collections
 import numpy as np
 import scipy.interpolate
 
-from .asarray import distance, hash, length, reorient, resample, smooth
-from .asarray import transform
+from .asarray import compress, distance, hash, length, reorient, resample
+from .asarray import smooth, transform
 import streamlines.io
 
 
@@ -115,6 +115,11 @@ class Streamline(object):
     @property
     def length(self):
         return length(self._points)
+    
+    def compress(self):
+        """Compress streamlines by downsampling them and removing colinear
+           segments"""
+        self._points = compress(self._points)
 
     def distance(left, right, nb_points=20):
         return distance(left._points, right._points, nb_points)
@@ -223,6 +228,10 @@ class Streamlines(object):
     def append(self, streamline):
         """Append a streamline to the sequence"""
         self._items.append(streamline)
+    
+    def compress(self):
+        for streamline in self:
+            streamline.compress()
 
     def filter(self, min_length=None):
 
