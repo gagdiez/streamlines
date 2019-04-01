@@ -4,7 +4,11 @@ import numpy as np
 import streamlines as sl
 
 
-def load(filename):
+def load(filename, space='mm'):
+
+    if space not in ['mm', 'voxel']:
+        raise ValueError(('{} is not a valid space. '
+                          'Space should be either mm or voxel').format(space))
 
     # Load the input streamlines.
     tractogram_file = nib.streamlines.load(filename)
@@ -18,10 +22,13 @@ def load(filename):
         voxel_sizes = (1, 1, 1)
 
     tractogram = tractogram_file.tractogram
-    if not np.allclose(affine_to_rasmm, np.eye(4)):
+    if space == 'voxel':
+        if np.allclose(affine_to_rasmm, np.eye(4)):
+            raise ValueError('The streamlines file does not have an affine, we'
+                             ' cannot transform it to voxel space')
         inv_affine = np.linalg.inv(affine_to_rasmm)
         tractogram = tractogram.apply_affine(inv_affine, False)
-
+            
     streamlines = sl.Streamlines(tractogram.streamlines,
                                  tractogram.affine_to_rasmm,
                                  reference_volume_shape,
