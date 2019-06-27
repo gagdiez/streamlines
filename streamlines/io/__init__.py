@@ -23,9 +23,9 @@ def load(filename, space='mm'):
 
     tractogram = tractogram_file.tractogram
     if space == 'voxel':
-#        if np.allclose(affine_to_rasmm, np.eye(4)):
-#            raise ValueError('The streamlines file does not have an affine, we'
-#                             ' cannot transform it to voxel space')
+        if np.allclose(affine_to_rasmm, np.eye(4)):
+            raise ValueError('The streamlines file does not have an affine, we'
+                             ' cannot transform it to voxel space')
         inv_affine = np.linalg.inv(affine_to_rasmm)
         tractogram = tractogram.apply_affine(inv_affine, False)
             
